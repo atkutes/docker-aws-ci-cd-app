@@ -4,11 +4,11 @@
 
 This project demonstrates a complete CI/CD pipeline using Docker, GitHub Actions, and AWS EC2.
 
-The application is automatically built, pushed, and deployed to a cloud server on every Git push.
+The application is automatically built, pushed to Docker Hub, and deployed to an AWS EC2 instance on every Git push.
 
 ---
 
-## 🧱 Architecture
+## 🧭 Architecture
 
 GitHub → GitHub Actions → Docker Hub → AWS EC2 → Browser
 
@@ -30,37 +30,7 @@ GitHub → GitHub Actions → Docker Hub → AWS EC2 → Browser
 * Automated CI/CD pipeline
 * Auto-deploy to AWS EC2 on every push
 * Remote deployment via SSH
-* Real-world debugging (networking, permissions, SSH)
-
----
-
-## 🐳 Docker
-
-Build image:
-docker build -t my-app .
-
-Run container:
-docker run -p 3000:3000 my-app
-
----
-
-## ☁️ Deployment (EC2)
-
-The application runs inside a Docker container on an AWS EC2 instance.
-
-docker run -d -p 80:3000 my-app
-
----
-
-## 🔄 CI/CD Pipeline
-
-On every push to main branch:
-
-1. Build Docker image
-2. Push to Docker Hub
-3. SSH into EC2
-4. Pull latest image
-5. Restart container
+* Real-world debugging experience
 
 ---
 
@@ -74,6 +44,68 @@ On every push to main branch:
 
 ---
 
+## 🐳 Docker
+
+Build image:
+docker build -t my-app .
+
+Run container:
+docker run -p 3000:3000 my-app
+
+---
+
+## ☁️ Deployment (AWS EC2)
+
+The application runs inside a Docker container on an EC2 instance.
+
+docker run -d -p 80:3000 my-app
+
+---
+
+## 🔄 CI/CD Pipeline
+
+On every push to the main branch:
+
+1. Build Docker image
+2. Push image to Docker Hub
+3. Connect to EC2 via SSH
+4. Pull latest image
+5. Restart container
+
+---
+
+## 🐛 Challenges & Solutions
+
+### 🔹 Docker not recognized on Windows
+
+Resolved by installing Docker Desktop and fixing PATH configuration.
+
+### 🔹 App not accessible via browser
+
+Solved by configuring AWS Security Groups and opening port 80.
+
+### 🔹 HTTP vs HTTPS issue
+
+Learned that HTTPS requires SSL configuration (used HTTP for now).
+
+### 🔹 GitHub Actions not triggering
+
+Fixed incorrect folder structure (`.github/workflows`).
+
+### 🔹 Missing secrets in CI/CD
+
+Added required GitHub Secrets (EC2_HOST, SSH key, Docker credentials).
+
+### 🔹 SSH connection timeout
+
+Resolved by updating Security Group to allow port 22.
+
+### 🔹 Docker permission issues on EC2
+
+Solved by using `sudo` in deployment script.
+
+---
+
 ## 🧠 What I Learned
 
 * How to build and run Docker containers
@@ -84,8 +116,8 @@ On every push to main branch:
 
 ---
 
-## 🌍 Future Improvements
+## 🔮 Future Improvements
 
-* Add HTTPS with Nginx + Let's Encrypt
-* Use Terraform for infrastructure
+* Add HTTPS using Nginx and Let's Encrypt
+* Use Terraform for infrastructure as code
 * Add monitoring and health checks
